@@ -1,0 +1,27 @@
+--path LoggingLib;
+PATH shared_common;
+--path LoggingLib.sridhar;
+CREATE COMPUTE MODULE ajay
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE req,reqtm,res,res_tm CHARACTER '';
+		DECLARE ccsid INTEGER InputRoot.Properties.CodedCharSetId;
+ 		DECLARE encdng INTEGER InputRoot.Properties.Encoding;
+		
+		DECLARE inref REFERENCE TO InputRoot.XMLNSC;
+		SET req = getpayload(inref,ccsid,encdng);
+		
+--	DECLARE REQTIME4j,REQ,RES,log4jpath CHARACTER;
+--	DECLARE rc BOOLEAN TRUE;
+--	CALL initLog4j(log4jpath) INTO rc;
+--   CALL log4j (ApplicationLabel, 'AJ_info','INFO',REQTIME4j) INTO rc;
+--   CALL log4j (ApplicationLabel, 'AJ_info','INFO','HTTPRouter Request: '||REQ ) INTO rc;
+--  
+--	CALL DB_LOG(ApplicationLabel,MessageFlowLabel,REQ,CURRENT_TIMESTAMP,RES,CURRENT_TIMESTAMP);
+	
+		CALL logging(req,reqtm,ApplicationLabel,res,res_tm);
+		
+		RETURN TRUE;
+	END;
+
+END MODULE;
