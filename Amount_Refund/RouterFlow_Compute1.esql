@@ -1,0 +1,74 @@
+
+
+CREATE COMPUTE MODULE RouterFlow_Compute1
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		
+		DECLARE pcode CHARACTER InputRoot.DFDL.ISO8583WithHeader.ProcessingCode_003;
+		DECLARE prcode INTEGER;
+		SET prcode = SUBSTRING(pcode FROM 5 FOR 2);
+		DECLARE queue ROW;
+		DECLARE query CHARACTER 'Select REQUEST_QUEUE from RETRIEVE_QUEUES WHERE PROCESSING_CODE =?';
+		SET queue.Records[] = PASSTHRU(query VALUES(prcode));
+		
+		if(prcode=20)THEN
+		 SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = queue.Records.REQUEST_QUEUE ;
+		 
+		ELSEIF(prcode=31)THEN
+		SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = queue.Records.REQUEST_QUEUE;
+		
+	ELSE
+		SET OutputRoot = 'Enter Valid Processing Code';
+		
+	END IF;
+		
+		
+		CALL LOGS.initLog4j('C:\ProgramData\ISO_config\Log4jConfigurationFile.xml') INTO rc;
+		
+         if(rc=false)then
+         set OutputRoot.XMLNSC.data=rc;
+	END IF;
+	
+	DECLARE RC1 BOOLEAN;
+		CALL LOGS.writeToLogFile(ApplicationLabel,'ISO','DEBUG','CHANNEL_REQUEST'||':'||var) INTO RC1;
+		CALL LOGS.writeToLogFile(ApplicationLabel,'ISO','DEBUG','QUEUE_NAME'||':'||var1) INTO RC1;
+		CALL LOGS.writeToLogFile(ApplicationLabel,'ISO','DEBUG','HOST_REQUEST'||':'||var2) INTO RC1;
+	
+	IF (RC1=FALSE)THEN
+	END IF;
+	
+		DECLARE msgid CHARACTER InputRoot.DFDL.ISO8583WithHeader.RetrievalReferenceNumber_037;
+		DECLARE msg REFERENCE TO InputRoot.DFDL.ISO8583WithHeader;
+		DECLARE msg_type CHARACTER InputRoot.Properties.MessageType;
+		DECLARE app_name CHARACTER ApplicationLabel;
+		DECLARE time_stamp DATE CURRENT_TIMESTAMP;
+		
+--		DECLARE payloadblob BLOB ASBITSTREAM (InputRoot.XMLNSC ENCODING 546 CCSID 1208);
+--		DECLARE payload CHAR CAST(payloadblob as CHAR CCSID 1208);
+	
+--		SET Environment.Request = InputRoot.XMLNSC.request;
+--		SET OutputRoot.XMLNSC.Request.emp = Environment.Request;
+
+		CALL LOGS.DB_LOGGING_ISO(msgid,msg,msg_type,app_name,time_stamp);
+		
+		SET OutputRoot = InputRoot;
+		
+		
+	END;
+END MODULE;
