@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmWSInput.msgnode="ComIbmWSInput.msgnode" xmlns:ComIbmWSReply.msgnode="ComIbmWSReply.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="Dynomic_result_set_flow.msgflow" nsPrefix="Dynomic_result_set_flow.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1" nodeLayoutStyle="RECTANGLE">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="Dynomic_result_set_flow" bundleName="Dynomic_result_set_flow" pluginId="Dynomic_result_set"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Dynomic_result_set/icons/full/obj16/Dynomic_result_set_flow.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Dynomic_result_set/icons/full/obj30/Dynomic_result_set_flow.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="22,118" computeExpression="esql://routine/#Dynomic_result_set_flow_Compute.Main">
+        <translation xmi:type="utility:ConstantString" string="Compute"/>
+      </nodes>
+      <nodes xmi:type="ComIbmWSInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="36,51" URLSpecifier="/Dynomic" messageDomainProperty="XMLNSC">
+        <translation xmi:type="utility:ConstantString" string="HTTP Input"/>
+      </nodes>
+      <nodes xmi:type="ComIbmWSReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="18,212">
+        <translation xmi:type="utility:ConstantString" string="HTTP Reply"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard>
+      <stickyNote location="251,51">
+        <body xmi:type="utility:ConstantString" string="create table Rathod(id INTEGER,name VARCHAR2(20),age INTEGER);"/>
+      </stickyNote>
+      <stickyNote location="265,127">
+        <body xmi:type="utility:ConstantString" string="create or replace PROCEDURE SELECT1 &#xD;&#xA;(&#xD;&#xA;  ID IN VARCHAR2 &#xD;&#xA;, PARAM2 OUT SYS_REFCURSOR &#xD;&#xA;) AS &#xD;&#xA;BEGIN&#xD;&#xA;OPEN param2 for&#xD;&#xA;  SELECT&#xD;&#xA;      *&#xD;&#xA;  FROM rathod where id = id;&#xD;&#xA;END SELECT1;"/>
+      </stickyNote>
+      <stickyNote location="583,230">
+        <body xmi:type="utility:ConstantString" string="&lt;Request>&#xD;&#xA;    &lt;Record>&#xD;&#xA;&#x9;&#x9;&lt;ID>812&lt;/ID>&#xD;&#xA;&#x9;&#x9;&lt;NAME>AJ&lt;/NAME>&#xD;&#xA;        &lt;AGE>26&lt;/AGE>&#xD;&#xA;&#x9;&lt;/Record>&#xD;&#xA;&#x9;&#xD;&#xA;&lt;/Request>"/>
+      </stickyNote>
+      <stickyNote location="577,125">
+        <body xmi:type="utility:ConstantString" string="http://localhost:7800/Dynomic&#xA;&#xA;with GET METHOD in post man"/>
+      </stickyNote>
+    </stickyBoard>
+  </eClassifiers>
+</ecore:EPackage>

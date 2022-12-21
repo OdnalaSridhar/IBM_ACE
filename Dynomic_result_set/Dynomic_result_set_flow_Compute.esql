@@ -1,0 +1,21 @@
+
+
+CREATE COMPUTE MODULE Dynomic_result_set_flow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		DECLARE ref REFERENCE TO InputRoot.XMLNSC.Request.Record;
+		DECLARE id INTEGER ref.ID;
+		 
+		 call selectdata(id,Environment.Variable[]);
+		 SET OutputRoot.XMLNSC.Response.data=Environment.Variable;
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE selectdata ( IN id INTEGER)
+	LANGUAGE DATABASE
+	DYNAMIC RESULT SETS 1
+	EXTERNAL NAME "retrieve";
+	
+	
+END MODULE;
